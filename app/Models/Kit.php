@@ -18,6 +18,6 @@ class Kit extends Model
 
     public function produtos()
     {
-        return $this->belongsToMany(Produto::class, 'kit_produto');
+        return $this->belongsToMany(Produto::class, 'kit_produto') ->withPivot('quantidade');
     }
 }

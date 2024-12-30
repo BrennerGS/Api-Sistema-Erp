@@ -16,7 +16,8 @@ return new class extends Migration
             $table->string('nome');
             $table->text('descricao');
             $table->decimal('preco', 8, 2);
-            $table->string('categoria');
+            $table->integer('estoque')->nullable();
+            $table->foreignId('categoria_id')->constrained('categoria');
             $table->foreignId('fornecedor_id')->constrained('fornecedores');
             $table->timestamps();
         });

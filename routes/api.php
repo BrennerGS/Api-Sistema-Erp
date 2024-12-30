@@ -6,6 +6,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 
 use App\Http\Controllers\ProdutoController;
+use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\CaixaController;
 use App\Http\Controllers\ContaController;
 use App\Http\Controllers\EstoqueController;
@@ -53,6 +54,18 @@ Route::group([
     Route::get('produtos/{id}', [ProdutoController::class, 'show']);
     Route::put('produtos/{id}', [ProdutoController::class, 'update']);
     Route::delete('produtos/{id}', [ProdutoController::class, 'destroy']);
+
+});
+
+//Produto
+Route::group([
+    'middleware' => ['auth:api'],
+], function ($router) {
+    Route::get('categoria', [CategoriaController::class, 'index']);
+    Route::post('categoria', [CategoriaController::class, 'store']);
+    Route::get('categoria/{id}', [CategoriaController::class, 'show']);
+    Route::put('categoria/{id}', [CategoriaController::class, 'update']);
+    Route::delete('categoria/{id}', [CategoriaController::class, 'destroy']);
 
 });
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Estoque;
+use App\Models\Produto;
 use Illuminate\Http\Request;
 
 class EstoqueController extends Controller
@@ -21,6 +22,9 @@ class EstoqueController extends Controller
             'data_saida' => 'nullable|date',
         ]);
 
+        $produto = Produto::find($request->produto_id);
+        $produto->update(['estoque' => $produto->estoque + $request->quantidade]);
+
         return Estoque::create($request->all());
     }
 
@@ -37,14 +41,31 @@ class EstoqueController extends Controller
             'data_entrada' => 'sometimes|required|date',
             'data_saida' => 'nullable|date',
         ]);
-
+        
         $estoque = Estoque::find($id);
+        $diferenca = $request->quantidade - $estoque->quantidade;
         $estoque->update($request->all());
-        return $estoque;
+        $produto = Produto::find($estoque->produto_id);
+        $produto->update(['estoque' => $produto->estoque + $diferenca]);
+
+        return response()->json(['message' => 'Estoque atualizado com sucesso!']);
     }
 
     public function destroy($id)
     {
-        return Estoque::destroy($id);
+        // Encontra a entrada de estoque pelo ID
+        $estoque = Estoque::find($id);
+
+        // Encontra o produto relacionado
+        $produto = Produto::find($estoque->produto_id);
+
+        // Subtrai a quantidade do estoque geral do produto
+        $produto->update(['estoque' => $produto->estoque - $estoque->quantidade]);
+
+        // Remove a entrada de estoque
+        $estoque->delete();
+
+        return response()->json(['message' => 'Estoque removido com sucesso!']);
     }
+
 }

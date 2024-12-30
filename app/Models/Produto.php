@@ -15,9 +15,15 @@ class Produto extends Model
         'nome',
         'descricao',
         'preco',
-        'categoria',
+        'estoque',
+        'categoria_id',
         'fornecedor_id',
     ];
+
+    public function categoria()
+    {
+        return $this->belongsTo(Categoria::class);
+    }
 
     public function fornecedor()
     {

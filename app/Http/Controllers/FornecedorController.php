@@ -9,7 +9,7 @@ class FornecedorController extends Controller
 {
     public function index()
     {
-        return Fornecedor::with('produtos')->get();
+        return Fornecedor::all();
     }
 
     public function store(Request $request)
@@ -17,7 +17,7 @@ class FornecedorController extends Controller
         $request->validate([
             'nome' => 'required|string|max:255',
             'contato' => 'required|string|max:255',
-            'endereco' => 'required|string',
+            'endereco' => 'required|string|max:255',
         ]);
 
         return Fornecedor::create($request->all());
@@ -25,7 +25,7 @@ class FornecedorController extends Controller
 
     public function show($id)
     {
-        return Fornecedor::with('produtos')->find($id);
+        return Fornecedor::all()->find($id);
     }
 
     public function update(Request $request, $id)
@@ -43,6 +43,12 @@ class FornecedorController extends Controller
 
     public function destroy($id)
     {
-        return Fornecedor::destroy($id);
+        
+        try {
+            Fornecedor::destroy($id);
+            return "deletado com sucesso";
+        } catch (\Throwable $th) {
+            throw $th;
+        }
     }
 }

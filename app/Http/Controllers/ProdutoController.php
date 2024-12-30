@@ -9,7 +9,7 @@ class ProdutoController extends Controller
 {
     public function index()
     {
-        return Produto::with('fornecedor', 'estoque', 'kits', 'notasFiscais')->get();
+        return Produto::with('fornecedor', 'kits', 'notasFiscais')->get();
     }
 
     public function store(Request $request)
@@ -18,7 +18,7 @@ class ProdutoController extends Controller
             'nome' => 'required|string|max:255',
             'descricao' => 'required|string',
             'preco' => 'required|numeric',
-            'categoria' => 'required|string|max:255',
+            'categoria_id' => 'sometimes|required|exists:categoria,id',
             'fornecedor_id' => 'required|exists:fornecedores,id',
         ]);
 
@@ -36,7 +36,7 @@ class ProdutoController extends Controller
             'nome' => 'sometimes|required|string|max:255',
             'descricao' => 'sometimes|required|string',
             'preco' => 'sometimes|required|numeric',
-            'categoria' => 'sometimes|required|string|max:255',
+            'categoria_id' => 'sometimes|required|exists:categoria,id',
             'fornecedor_id' => 'sometimes|required|exists:fornecedores,id',
         ]);
 
@@ -47,6 +47,12 @@ class ProdutoController extends Controller
 
     public function destroy($id)
     {
-        return Produto::destroy($id);
+        try {
+            Produto::destroy($id);
+            return "deletado com sucesso";
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+        
     }
 }

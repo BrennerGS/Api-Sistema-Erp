@@ -22,6 +22,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('kit_id')->constrained('kits');
             $table->foreignId('produto_id')->constrained('produtos');
+            $table->integer('quantidade')->after('produto_id');
             $table->timestamps();
         });
     }
@@ -31,7 +32,10 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('kit_produto'); 
+        Schema::table('kit_produto', 
+        function (Blueprint $table) { 
+            $table->dropColumn('quantidade'); 
+        });
         Schema::dropIfExists('kits'); 
     }
 };
